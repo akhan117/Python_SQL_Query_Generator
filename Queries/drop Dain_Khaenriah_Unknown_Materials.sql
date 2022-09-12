@@ -1,0 +1,2 @@
+use test
+drop table Dain_Khaenriah_Unknown_Materials
