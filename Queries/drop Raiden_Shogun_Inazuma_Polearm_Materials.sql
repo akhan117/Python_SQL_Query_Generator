@@ -1,2 +1,0 @@
-use test
-drop table Raiden_Shogun_Inazuma_Polearm_Materials
