@@ -211,34 +211,34 @@ def close_insert(c_info, inp, key):
 def level_90_ascension(c_info, ac_info):
     if c_info["Element"] != "Unknown":
         gem_type = gem_relations[c_info["Element"]]
-        ac_info[gem_type + " Sliver"] = 1
-        ac_info[gem_type + " Fragment"] = 9
-        ac_info[gem_type + " Chunk"] = 9
-        ac_info[gem_type + " Gemstone"] = 6
+        ac_info[gem_type + " Sliver"] = (1, "Elemental Jewel", 2)
+        ac_info[gem_type + " Fragment"] = (9, "Elemental Jewel", 3)
+        ac_info[gem_type + " Chunk"] = (9, "Elemental Jewel", 4)
+        ac_info[gem_type + " Gemstone"] = (6, "Elemental Jewel", 5)
 
     if c_info["Talent Materials"] != "Unknown":
         talent_type = c_info["Talent Materials"]
-        ac_info["Teachings of " + talent_type] = 9
-        ac_info["Guide to " + talent_type] = 63
-        ac_info["Philosophies of " + talent_type] = 114
+        ac_info["Teachings of " + talent_type] = (9, "Talent Book", 2)
+        ac_info["Guide to " + talent_type] = (63, "Talent Book", 3)
+        ac_info["Philosophies of " + talent_type] = (114, "Talent Book", 4)
 
     if c_info["Common Materials"] != "Unknown":
         com_mat = common_material_relations[c_info["Common Materials"]]
         com_mat_num = [36, 96, 129]
         for n, i in enumerate(com_mat):
-            ac_info[i] = com_mat_num[n]
+            ac_info[i] = (com_mat_num[n], "Enemy Drop",  n + 1)
 
     if c_info["Local Materials"] != "Unknown":
-        ac_info[c_info["Local Materials"]] = 168
+        ac_info[c_info["Local Materials"]] = (168, "Local Speciality", 1)
 
     if c_info["World Boss Materials"] != "Unknown":
-        ac_info[c_info["World Boss Materials"]] = 46
+        ac_info[c_info["World Boss Materials"]] = (46, "World Boss Material", 4)
 
     if c_info["Weekly Boss Materials"] != "Unknown":
-        ac_info[c_info["Weekly Boss Materials"]] = 18
+        ac_info[c_info["Weekly Boss Materials"]] = (18, "Weekly Boss Drop", 5)
 
-    ac_info["Mora"] = 1673400 + (3 * 1652500) + 420000
-    ac_info["Crown of Insight"] = 3
+    ac_info["Mora"] = (1673400 + (3 * 1652500) + 420000, "Mora", 3)
+    ac_info["Crown of Insight"] = (3, "Crown", 5)
 
 
 def print_dict(char_dict):

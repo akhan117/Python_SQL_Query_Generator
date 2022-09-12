@@ -39,15 +39,17 @@ def create_table(cursor):
     table_name = name + "_" + c_info["Nationality"] + "_" + c_info["Weapon"] + "_Materials"
     print(table_name)
 
-    columns = "(Material_Name varchar(255), Number_Needed int)"
+    columns = "(Material_Name varchar(255), Number_Needed int, " \
+              "Material_Type varchar(255), Material_Rarity int)"
 
     query = "create table " + table_name + " " + columns
 
     print(query)
     cursor.execute(query)
     for i in ac_info:
-        query2 = "insert into " + table_name + " (Material_Name, Number_Needed) values ('" + i + "'," + str(
-                ac_info[i]) + ")"
+        query2 = "insert into " + table_name + " (Material_Name, Number_Needed, Material_Type, Material_Rarity)" \
+                                               " values ('" + i + "'," + str(ac_info[i][0]) + ", '" + ac_info[i][1] +\
+                                                "', " + str(ac_info[i][2]) + ")"
         cursor.execute(query2)
         query = query + '\n' + query2
 
