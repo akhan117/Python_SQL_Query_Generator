@@ -212,7 +212,7 @@ if __name__ == '__main__':
                       password=r'2022', database=database)
     cursor = conn.cursor()
 
-    inp = input("1. Create a Character Entry, 2. Drop, 3. Select :")
+    inp = input("1. Create a Character Entry, 2. Drop, 3. Select, 4. Advanced Access :")
 
     if inp == '1':
         create_tables(cursor)
@@ -229,6 +229,26 @@ if __name__ == '__main__':
         print("Selected: ")
         qg.print_list(table_names)
         select(cursor, table_names)
+
+    elif inp == '4':
+        tables_names = tables_choose()
+        print("What ascension level? (Enter the Ascension number)")
+        asc_p = ("Ascension 1: (20+)", "Ascension 2: (40+)", "Ascension 3: (50+)", "Ascension 4: (60+)",
+                 "Ascension 5: (70+)", "Ascension 6: (80+)")
+        asc_i = (20, 40, 50, 60, 70, 80,)
+        qg.print_list(asc_p)
+        inp_m = input()
+        sel_m = qg.match_num_list(asc_i, int(inp_m))
+        print("asc_" + str(sel_m))
+
+        t_lev = input("What talent levels? (e.g, 10-9-10 or 6, 10, 10): ")
+        if '-' in t_lev:
+            t_lev = t_lev.split('-')
+        elif ',' in t_lev:
+            t_lev = t_lev.split(',')
+
+        t_lev = ['t' + x.strip() for x in t_lev]
+        print(t_lev)
 
     conn.commit()
     conn.close()
