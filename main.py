@@ -3,6 +3,23 @@ import querygenerate as qg
 import difflib as dl
 
 
+def advanced_select(cursor_m, tables, asc, tal):
+    for table in tables:
+        print("This is " + table)
+        if 'Ascension' in table:
+            query = "select m_name," + str(asc) + " from " + table
+            cursor_m.execute(query)
+            row = cursor_m.fetchone()
+
+            try:
+                while row:
+                    print(row)
+                    row = cursor_m.fetchone()
+            except:
+                print("Yarghh")
+
+            save_query(query, "select " + table)
+
 def select(cursor_m, tables):
     for table in tables:
         print()
@@ -239,7 +256,7 @@ if __name__ == '__main__':
         qg.print_list(asc_p)
         inp_m = input()
         sel_m = qg.match_num_list(asc_i, int(inp_m))
-        print("asc_" + str(sel_m))
+        sel_m = "asc_" + str(sel_m)
 
         t_lev = input("What talent levels? (e.g, 10-9-10 or 6, 10, 10): ")
         if '-' in t_lev:
@@ -249,6 +266,7 @@ if __name__ == '__main__':
 
         t_lev = ['t' + x.strip() for x in t_lev]
         print(t_lev)
+        advanced_select(cursor, tables_names, sel_m, t_lev)
 
     conn.commit()
     conn.close()
