@@ -4,21 +4,69 @@ import difflib as dl
 
 
 def advanced_select(cursor_m, tables, asc, tal):
+    ret = {}
     for table in tables:
-        print("This is " + table)
         if 'Ascension' in table:
+            asc_m = {asc[-2:] + "+": {}}
             query = "select m_name," + str(asc) + " from " + table
             cursor_m.execute(query)
             row = cursor_m.fetchone()
 
             try:
                 while row:
-                    print(row)
+                    asc_m[asc[-2:] + "+"][row[0]] = row[1]
                     row = cursor_m.fetchone()
             except:
-                print("Yarghh")
+                raise Exception("Could not report Ascension Materials!")
 
             save_query(query, "select " + table)
+            if 'Cumulative_Ascension' in table:
+                ret['Cumulative_Ascension'] = asc_m
+            else:
+                ret['Ascension'] = asc_m
+
+        elif "Materials" in table:
+            tal_m = {}
+            for t in tal:
+                if t[1:] in tal_m.keys():
+                    x, y = tal_m[t[1:]]
+                    tal_m[t[1:]] = (x + 1, y)
+                else:
+                    tal_m[t[1:]] = (1, {})
+                query = "select m_name," + str(t) + " from " + table
+                cursor_m.execute(query)
+                row = cursor_m.fetchone()
+
+                try:
+                    while row:
+                        tal_m[t[1:]][1][row[0]] = row[1]
+                        row = cursor_m.fetchone()
+                except:
+                    raise Exception("Could not report Talent Materials!")
+
+                save_query(query, "select " + table)
+            if 'Cumulative_Talent' in table:
+                ret['Cumulative_Talent'] = tal_m
+            else:
+                ret['Talent'] = tal_m
+
+    return ret
+
+
+def talent_adder(all_d):
+
+    tal = all_d["Talent"]
+    for i in tal:
+        print(i)
+        print(tal[i][0])
+        print(tal[i][1])
+        for j in tal[i][1]:
+            tal[i][1][j] = tal[i][1][j] * tal[i][0]
+            print(j + ": " + str(tal[i][1][j]))
+
+
+    qg.print_dict(tal)
+
 
 def select(cursor_m, tables):
     for table in tables:
@@ -202,8 +250,8 @@ def tables_choose():
 
     tables_trunc = list(set(tables_trunc))
     qg.print_list(tables_trunc)
-    inp_m = input()
-    sel = qg.match_num_list(tables_trunc, int(inp_m))
+    inp_t = input()
+    sel = qg.match_num_list(tables_trunc, int(inp_t))
 
     cursor.execute("select * from sys.tables")
     row = cursor.fetchone()
@@ -266,7 +314,10 @@ if __name__ == '__main__':
 
         t_lev = ['t' + x.strip() for x in t_lev]
         print(t_lev)
-        advanced_select(cursor, tables_names, sel_m, t_lev)
+        t_a_dict = advanced_select(cursor, tables_names, sel_m, t_lev)
+        qg.print_dict(t_a_dict)
+        print()
+        talent_adder(t_a_dict)
 
     conn.commit()
     conn.close()
